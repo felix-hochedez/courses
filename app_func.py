@@ -149,7 +149,7 @@ def get_rayon_data(current_data, rayon):
 
     return rayon_df
 
-def select_rayon_form(current_data, rayon_data):
+def select_rayon_form(current_data, rayon_choice):
 
     actions = st.selectbox("Choisir une action:",
                            [
@@ -159,6 +159,8 @@ def select_rayon_form(current_data, rayon_data):
                            )
 
     if actions == "Ajouter un article à la liste":
+
+        rayon_data = get_rayon_data(current_data=current_data, rayon=rayon_choice)
 
         selected = st.selectbox("Selectionner l'article", options=rayon_data['Article'].tolist())
         item_data = rayon_data[rayon_data['Article'] == selected].iloc[0]
@@ -205,36 +207,54 @@ def select_rayon_form(current_data, rayon_data):
 
     elif actions == 'Retirer un article de la liste':
 
-        selected = st.selectbox("Selectionner l'article à supprimer", options=rayon_data['Article'].tolist())
-        item_data = rayon_data[rayon_data['Article'] == selected].iloc[0]
+        rayon_data = get_rayon_data(current_data=current_data, rayon=rayon_choice)
+        rayon_data = rayon_data.query('Quantité > 0')
 
-        add_button = st.button(label="Supprimer l'article.")
-        if add_button:
-            current_data.drop(current_data[current_data['Article'] == item_data['Article']].index,
-                              inplace=True)
-            if item_data['Commentaire'] == 'nan':
-                comment_value = ""
-            else:
-                comment_value = item_data['Commentaire']
+        if rayon_data.shape[0] != 0:
+            selected = st.selectbox("Selectionner l'article à supprimer", options=rayon_data['Article'].tolist())
+            item_data = rayon_data[rayon_data['Article'] == selected].iloc[0]
 
-            updated_article = pd.DataFrame(
+            add_button = st.button(label="Supprimer l'article.")
+            if add_button:
+                current_data.drop(current_data[current_data['Article'] == item_data['Article']].index,
+                                  inplace=True)
+                if item_data['Commentaire'] == 'nan':
+                    comment_value = ""
+                else:
+                    comment_value = item_data['Commentaire']
 
-                [
-                    {
-                        "Article": item_data['Article'],
-                        "Quantité": 0,
-                        "Unité": item_data['Unité'],
-                        "Rayon": item_data['Rayon'],
-                        "Commentaire": comment_value,
-                    }
-                ]
+                updated_article = pd.DataFrame(
 
-            )
+                    [
+                        {
+                            "Article": item_data['Article'],
+                            "Quantité": 0,
+                            "Unité": item_data['Unité'],
+                            "Rayon": item_data['Rayon'],
+                            "Commentaire": comment_value,
+                        }
+                    ]
 
-            updated_df = pd.concat([current_data, updated_article], ignore_index=True)
-            updated_df = updated_df.sort_values('Article')
+                )
 
-            conn.update(worksheet='articles', data=updated_df)
-            st.success("L'article a bien été retiré à la liste.")
+                updated_df = pd.concat([current_data, updated_article], ignore_index=True)
+                updated_df = updated_df.sort_values('Article')
+
+                conn.update(worksheet='articles', data=updated_df)
+                st.success("L'article a bien été retiré à la liste.")
+        else:
+            st.warning("Cette catégorie ne contient actuellement aucun article")
+            st.stop()
+
+def item_listing(data):
+    for i, row in data.iterrows():
+        # Créer la phrase
+        phrase = f"{row['Article']}: {row['Quantité']} {row['Unité']}. "
+
+        if data.loc[i, 'Commentaire'] != '':
+            phrase += f"({data.loc[i, 'Commentaire']})"
+
+        # Afficher la phrase
+        st.write(phrase)
 
 
