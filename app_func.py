@@ -3,8 +3,19 @@ from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 
 # Connection GSheets
-global conn
+global conn, rayons, units
 conn = st.connection("gsheets", type=GSheetsConnection)
+
+rayons = [
+        'Fruits & Légumes',
+        'Boucherie',
+        'Boulangerie'
+    ]
+units = [
+    'Non précisé',
+    'Unité(s)',
+    'g', 'kg', 'Litre(s)'
+]
 
 def get_dataframe():
     #Lire les données existantes
@@ -14,16 +25,6 @@ def get_dataframe():
     return existing_data
 
 def data_form(current_data):
-    rayons = [
-        'Fruits & Légumes',
-        'Boucherie',
-        'Boulangerie'
-    ]
-    units = [
-        'Non précisé',
-        'Unité(s)',
-        'g', 'kg', 'Litre(s)'
-    ]
 
     actions = st.selectbox("Choisir une action:",
                            [
