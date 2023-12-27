@@ -21,4 +21,4 @@ today = datetime.today()
 next_saturday = today + timedelta(days=5 - today.weekday())
 
 # Afficher le sélecteur de date
-date = st.date_input("Sélectionnez une date", value=next_saturday)
+date_courses = st.date_input("Sélectionnez une date", value=next_saturday)
