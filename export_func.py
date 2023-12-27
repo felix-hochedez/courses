@@ -3,20 +3,24 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import streamlit as st
 from app_func import rayons
-import creds
 
 approved_receivers = ["F.H", "AS.H", "Félix"]
 
 def email_export(liste_to_export, receiver, objet, comm, date):
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    smtp_username = creds.sender
-    smtp_password = creds.pwd
+    smtp_username = st.secrets["sender"]
+    smtp_password = st.secrets["pwd"]
 
     # Informations sur l'email
-    from_address = creds.sender
+    from_address = st.secrets["sender"]
     if receiver in approved_receivers:
-        to_address = creds.receivers[receiver]
+        if receiver == "F.H":
+            to_address = st.secrets["fh"]
+        elif receiver == "AS.H":
+            to_address = st.secrets["as"]
+        elif receiver == "Félix":
+            to_address = st.secrets["fh"]
     else:
         to_address = receiver
     subject = objet
