@@ -2,6 +2,16 @@ import streamlit as st
 from app_func import get_dataframe, data_form
 from datetime import datetime, timedelta
 
+st.set_page_config(page_title="Liste de courses", page_icon="🛒")
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 st.title('Liste de courses')
 
 st.write(f"## Ajout d'article au magasin:")
