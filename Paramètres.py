@@ -2,7 +2,7 @@ import streamlit as st
 from app_func import get_dataframe, data_form
 from datetime import datetime, timedelta
 
-st.set_page_config(page_title="Liste de courses", page_icon="🛒")
+st.set_page_config(page_title="Liste de courses", page_icon=":pizza:")
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
