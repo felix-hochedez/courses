@@ -32,6 +32,7 @@ mail_object = f'{formated_date} - Liste de courses.'
 receiver = st.selectbox('Entrer le destinataire:', ["Félix", "F.H", "AS.H"])
 email_receiver = st.text_input("Ou taper l'adresse manuellement (laisser vide sinon):", value="")
 email_body = list_to_export(actual_list)
+mdp = st.text_input("Rentrer le mot de passe pour envoyer:", value="", type="password")
 
 if email_receiver != "":
     actual_receiver = email_receiver
@@ -39,4 +40,8 @@ else:
     actual_receiver = receiver
 
 if st.button('Envoyer'):
-    email_export(email_body, actual_receiver, mail_object, comment_global, formated_date)
+    if mdp == st.secrets['creds']['mdp']:
+        email_export(email_body, actual_receiver, mail_object, comment_global, formated_date)
+    else:
+        st.warning("Mot de passe incorrect.")
+        st.stop()
