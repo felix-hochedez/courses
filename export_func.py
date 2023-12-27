@@ -20,7 +20,7 @@ def email_export(liste_to_export, receiver, objet, comm, date):
         elif receiver == "AS.H":
             to_address = st.secrets["creds"]["as"]
         elif receiver == "Félix":
-            to_address = st.secrets["creds"]["fh"]
+            to_address = st.secrets["creds"]["felix"]
     else:
         to_address = receiver
     subject = objet
