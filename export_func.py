@@ -9,18 +9,18 @@ approved_receivers = ["F.H", "AS.H", "Félix"]
 def email_export(liste_to_export, receiver, objet, comm, date):
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    smtp_username = st.secrets["sender"]
-    smtp_password = st.secrets["pwd"]
+    smtp_username = st.secrets["creds"]["sender"]
+    smtp_password = st.secrets["creds"]["pwd"]
 
     # Informations sur l'email
-    from_address = st.secrets["sender"]
+    from_address = st.secrets["creds"]["sender"]
     if receiver in approved_receivers:
         if receiver == "F.H":
-            to_address = st.secrets["fh"]
+            to_address = st.secrets["creds"]["fh"]
         elif receiver == "AS.H":
-            to_address = st.secrets["as"]
+            to_address = st.secrets["creds"]["as"]
         elif receiver == "Félix":
-            to_address = st.secrets["fh"]
+            to_address = st.secrets["creds"]["fh"]
     else:
         to_address = receiver
     subject = objet
